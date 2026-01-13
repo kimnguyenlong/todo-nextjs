@@ -1,29 +1,52 @@
-import { Todo } from "@/src/entities/todo";
+import { Todo, TodoStatus } from "@/src/entities/todo";
+import { randomUUID } from "crypto";
 
 export class InMemoryTodoRepository {
-    private todos: Todo[] = []; // In-memory storage
+    private todos: Todo[] = [];
 
     constructor() {
-        // Initialize with some dummy data
-        this.todos = [
-            {
-                id: "1",
-                title: "Sample Todo 1",
-                status: "new",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                id: "2",
-                title: "Sample Todo 2",
-                status: "in-progress",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-        ];
+        this.todos = [];
+    }
+
+    async create(title: string): Promise<Todo> {
+        const todo = {
+            id: randomUUID().toString(),
+            title,
+            status: TodoStatus.New,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+        this.todos.push(todo);
+        return todo;
     }
 
     async findAll(): Promise<Todo[]> {
-        return this.todos;
+        return this.todos.sort((a, b) =>
+            b.updatedAt.getTime() - a.updatedAt.getTime()
+        );
+    }
+
+    async updateStatus(id: string, status: TodoStatus): Promise<Todo> {
+        const index = this.todos.findIndex((t) => t.id === id);
+        if (index === -1) {
+            throw new Error("Todo not found");
+        }
+        const updatedAt = new Date();
+        const updatedTodo = {
+            ...this.todos[index],
+            status,
+            updatedAt,
+        };
+        this.todos[index] = updatedTodo;
+        return updatedTodo;
+    }
+
+    async delete(id: string): Promise<Todo> {
+        const index = this.todos.findIndex((t) => t.id === id);
+        if (index === -1) {
+            throw new Error("Todo not found");
+        }
+        const [deletedTodo] = this.todos.splice(index, 1);
+        return deletedTodo;
     }
 }

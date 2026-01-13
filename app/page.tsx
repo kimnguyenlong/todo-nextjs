@@ -1,11 +1,12 @@
 import { getTodos } from "@/app/actions";
-import TodoCard from "./_components/ui/todo-card";
+import TodoCard from "@/app/_components/ui/todo-card";
+import CreateTodo from "@/app/_components/ui/create-todo";
 
 export default async function Home() {
   const todos = await getTodos();
   return (
     <div>
-      <h1>Todo List</h1>
+      <CreateTodo />
       <div>
         <li>
           {todos.map((todo) => (
