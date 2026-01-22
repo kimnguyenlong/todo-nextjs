@@ -5,7 +5,22 @@ export class InMemoryTodoRepository {
     private todos: Todo[] = [];
 
     constructor() {
-        this.todos = [];
+        this.todos = [
+            {
+                id: randomUUID().toString(),
+                title: "Sample Todo 1",
+                status: TodoStatus.New,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                id: randomUUID().toString(),
+                title: "Sample Todo 2",
+                status: TodoStatus.Todo,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+        ];
     }
 
     async create(title: string): Promise<Todo> {

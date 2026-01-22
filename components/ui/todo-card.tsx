@@ -7,7 +7,7 @@ interface Props {
 
 const TodoCard = ({ todo }: Props) => {
     return (
-        <div className='border-2 gap-2 p-2 flex flex-col'>
+        <div className='gap-2 p-2 flex flex-col'>
             <h3>{todo.title} ({todo.status})</h3>
             <p className='text-xs'>{todo.createdAt.toLocaleString()}</p>
             <div className='flex gap-4'>
